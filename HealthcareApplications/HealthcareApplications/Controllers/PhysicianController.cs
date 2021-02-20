@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HealthcareApplications.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthcareApplications.Controllers
@@ -13,5 +14,12 @@ namespace HealthcareApplications.Controllers
             return View();
         }
 
+        public List<Patient> PatientsByPhysicianId(string physicianId)
+        {
+            List<Patient> patients = new List<Patient>();
+
+
+            return patients;
+        }
     }
 }
