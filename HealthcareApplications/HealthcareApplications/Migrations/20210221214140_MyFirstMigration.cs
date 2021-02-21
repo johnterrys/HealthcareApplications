@@ -71,6 +71,12 @@ namespace HealthcareApplications.Migrations
                 name: "IX_Prescription_PatientId",
                 table: "Prescription",
                 column: "PatientId");
+
+            migrationBuilder.InsertData(
+                table: "Patients",
+                columns: new[] { "Name", "Id", "DateOfBirth", "Address", "PhysicianId" },
+                values: new object[] { "Mark Twain", 1, "1835-11-30", "351 Farmington Avenue, Hartford, CT 12345", 1 }
+                ); 
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
