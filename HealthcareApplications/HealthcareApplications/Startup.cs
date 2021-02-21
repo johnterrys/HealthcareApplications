@@ -26,7 +26,7 @@ namespace HealthcareApplications
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<PatientContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PatientContext"));
+            services.AddDbContext<PatientContext>(options => options.UseSqlServer(Configuration.GetConnectionString("PatientContext")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

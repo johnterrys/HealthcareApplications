@@ -22,13 +22,9 @@ namespace HealthcareApplications.Controllers
             return View();
         }
 
-        public List<Patient> PatientsByPhysicianId(string physicianId)
+        public List<Patient> PatientsByPhysicianId(int physicianId)
         {
-            List<Patient> patients = new List<Patient>();
-
-            //_patientContext.Patients.Select(patient => patient.Id == physicianId);
-
-            return patients;
+            return _patientContext.Patients.Where(patient => patient.Id == physicianId).ToList();
         }
     }
 }
