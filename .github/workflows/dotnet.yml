@@ -24,6 +24,6 @@ jobs:
     - name: List Files In Directory
       run: ls
     - name: Build
-      run: dotnet build [HealthcareApplications] --no-restore
+      run: dotnet build [HealthcareApplications/HealthcareApplications.sln] --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
