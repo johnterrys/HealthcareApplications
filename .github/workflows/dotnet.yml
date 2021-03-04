@@ -22,7 +22,7 @@ jobs:
     - name: Working Directory
       run: pwd
     - name: List Files In Directory
-      run: ls -lrt
+      run: ls -l
     - name: Build
       run: dotnet build --no-restore
     - name: Test
