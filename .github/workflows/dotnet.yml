@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build [HealthcareApplications]:
+  build:
 
     runs-on: windows-latest
 
@@ -24,6 +24,6 @@ jobs:
     - name: List Files In Directory
       run: ls
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build [HealthcareApplications] --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
