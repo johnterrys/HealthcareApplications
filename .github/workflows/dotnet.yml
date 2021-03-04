@@ -21,6 +21,8 @@ jobs:
     #  run: dotnet restore
     - name: Working Directory
       run: pwd
+    - name: List Files In Directory
+      run: ls -lrt
     - name: Build
       run: dotnet build --no-restore
     - name: Test
