@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build [HealthcareApplications]:
 
     runs-on: windows-latest
 
