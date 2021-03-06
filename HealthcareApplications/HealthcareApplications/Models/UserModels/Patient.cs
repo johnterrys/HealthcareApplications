@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -13,8 +14,9 @@ namespace HealthcareApplications.Models
         public int Id { get; set; }
         public DateTime DateOfBirth { get; set; }
         public String Address { get; set; }
-        public Physician Physician { get; set; }
-        public Prescription[] Prescriptions { get; set; }
+        public int PhysicianId { get; set; }
+        [NotMapped]
+        public List<int> PrescriptionIds { get; set; }
         #endregion
     }
 }

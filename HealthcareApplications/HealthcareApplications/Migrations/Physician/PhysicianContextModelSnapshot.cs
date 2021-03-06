@@ -6,10 +6,10 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
-namespace HealthcareApplications.Migrations
+namespace HealthcareApplications.Migrations.Physician
 {
-    [DbContext(typeof(PatientContext))]
-    partial class PatientContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(PhysicianContext))]
+    partial class PhysicianContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
@@ -40,7 +40,41 @@ namespace HealthcareApplications.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Patients");
+                    b.HasIndex("PhysicianId");
+
+                    b.ToTable("Patient");
+                });
+
+            modelBuilder.Entity("HealthcareApplications.Models.Physician", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("LicenseNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Physician");
+                });
+
+            modelBuilder.Entity("HealthcareApplications.Models.Patient", b =>
+                {
+                    b.HasOne("HealthcareApplications.Models.Physician", null)
+                        .WithMany("Patients")
+                        .HasForeignKey("PhysicianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HealthcareApplications.Models.Physician", b =>
+                {
+                    b.Navigation("Patients");
                 });
 #pragma warning restore 612, 618
         }

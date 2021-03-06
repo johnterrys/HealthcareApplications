@@ -7,22 +7,53 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareApplications.Data;
 using HealthcareApplications.Models;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HealthcareApplications.Controllers
 {
     public class PatientsController : Controller
     {
-        private readonly PatientContext _context;
+        private readonly PatientContext _patientContext;
+        private readonly PhysicianContext _physicianContext;
 
-        public PatientsController(PatientContext context)
+        public PatientsController(PatientContext context, PhysicianContext physicianContext)
         {
-            _context = context;
+            _patientContext = context;
+            _physicianContext = physicianContext;
         }
 
         // GET: Patients
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchPhysician, string searchPatient)
         {
-            return View(await _context.Patients.ToListAsync());
+
+            List<SelectListItem> physicians = _physicianContext.Physician
+                                                                   .Select(p => new SelectListItem()
+                                                                    {
+                                                                        Value = p.Id.ToString(),
+                                                                        Text = p.Name
+                                                                    })
+                                                                    .ToList();
+
+            var patients = from m in _patientContext.Patients
+                           select m;
+
+            if (!string.IsNullOrEmpty(searchPatient))
+            {
+                patients = patients.Where(s => s.Name.Contains(searchPatient) || s.Id.ToString() == searchPatient);
+            }
+
+            if (!string.IsNullOrEmpty(searchPhysician))
+            {
+                patients = patients.Where(x => x.PhysicianId.ToString() == searchPhysician);
+            }
+
+            var vm = new PatientsPhysicianViewModel
+            {
+                Physicians = new SelectList(physicians, "Value", "Text"),
+                Patients = await patients.ToListAsync()
+            };
+
+            return View(vm);
         }
 
         // GET: Patients/Details/5
@@ -33,7 +64,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var patient = await _context.Patients
+            var patient = await _patientContext.Patients
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (patient == null)
             {
@@ -58,8 +89,8 @@ namespace HealthcareApplications.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(patient);
-                await _context.SaveChangesAsync();
+                _patientContext.Add(patient);
+                await _patientContext.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(patient);
@@ -73,7 +104,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var patient = await _context.Patients.FindAsync(id);
+            var patient = await _patientContext.Patients.FindAsync(id);
             if (patient == null)
             {
                 return NotFound();
@@ -97,8 +128,8 @@ namespace HealthcareApplications.Controllers
             {
                 try
                 {
-                    _context.Update(patient);
-                    await _context.SaveChangesAsync();
+                    _patientContext.Update(patient);
+                    await _patientContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +155,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var patient = await _context.Patients
+            var patient = await _patientContext.Patients
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (patient == null)
             {
@@ -139,15 +170,20 @@ namespace HealthcareApplications.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var patient = await _context.Patients.FindAsync(id);
-            _context.Patients.Remove(patient);
-            await _context.SaveChangesAsync();
+            var patient = await _patientContext.Patients.FindAsync(id);
+            _patientContext.Patients.Remove(patient);
+            await _patientContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PatientExists(int id)
         {
-            return _context.Patients.Any(e => e.Id == id);
+            return _patientContext.Patients.Any(e => e.Id == id);
+        }
+
+        public async Task<IActionResult> PatientsByPhysicianId(int physicianId)
+        {
+            return View("Index", await _patientContext.Patients.Where(patient => patient.PhysicianId == physicianId).ToListAsync());
         }
     }
 }

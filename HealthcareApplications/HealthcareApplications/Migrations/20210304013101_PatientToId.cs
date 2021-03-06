@@ -1,46 +1,58 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace HealthcareApplications.Migrations
 {
-    public partial class MyFirstMigration : Migration
+    public partial class PatientToId : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Patients_Physician_PhysicianId",
+                table: "Patients");
+
+            migrationBuilder.DropTable(
+                name: "Physician");
+
+            migrationBuilder.DropTable(
+                name: "Prescription");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Patients_PhysicianId",
+                table: "Patients");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "PhysicianId",
+                table: "Patients",
+                type: "int",
+                nullable: false,
+                defaultValue: 0,
+                oldClrType: typeof(int),
+                oldType: "int",
+                oldNullable: true);
+        }
+
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.AlterColumn<int>(
+                name: "PhysicianId",
+                table: "Patients",
+                type: "int",
+                nullable: true,
+                oldClrType: typeof(int),
+                oldType: "int");
+
             migrationBuilder.CreateTable(
                 name: "Physician",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    LicenseNumber = table.Column<int>(type: "int", nullable: false)
+                    LicenseNumber = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Physician", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Patients",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhysicianId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Patients", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Patients_Physician_PhysicianId",
-                        column: x => x.PhysicianId,
-                        principalTable: "Physician",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -72,18 +84,13 @@ namespace HealthcareApplications.Migrations
                 table: "Prescription",
                 column: "PatientId");
 
-        }
-
-        protected override void Down(MigrationBuilder migrationBuilder)
-        {
-            migrationBuilder.DropTable(
-                name: "Prescription");
-
-            migrationBuilder.DropTable(
-                name: "Patients");
-
-            migrationBuilder.DropTable(
-                name: "Physician");
+            migrationBuilder.AddForeignKey(
+                name: "FK_Patients_Physician_PhysicianId",
+                table: "Patients",
+                column: "PhysicianId",
+                principalTable: "Physician",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
     }
 }
