@@ -11,7 +11,7 @@
 </p>
 <form asp-controller="Patients" asp-action="Index" method="get">
     <p>
-        <select asp-for="SearchPhysician" asp-items="Model.Physicians">
+      Physician: <select asp-for="SearchPhysician" asp-items="Model.Physicians">
             <option value="">All</option>
         </select>
 
@@ -34,6 +34,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Patients[0].Address)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patients[0].PhysicianId)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -51,6 +54,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Address)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PhysicianId)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
