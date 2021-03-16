@@ -26,7 +26,7 @@ namespace HealthcareApplications.Controllers
         public async Task<IActionResult> Index(string searchPhysician, string searchPatient)
         {
 
-            List<SelectListItem> physicians = _physicianContext.Physician
+            List<SelectListItem> physicians = _physicianContext.Physicians
                                                                    .Select(p => new SelectListItem()
                                                                     {
                                                                         Value = p.Id.ToString(),

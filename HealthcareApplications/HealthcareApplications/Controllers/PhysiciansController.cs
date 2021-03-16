@@ -22,7 +22,7 @@ namespace HealthcareApplications.Controllers
         // GET: Physicians
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Physician.ToListAsync());
+            return View(await _context.Physicians.ToListAsync());
         }
 
         // GET: Physicians/Details/5
@@ -33,7 +33,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var physician = await _context.Physician
+            var physician = await _context.Physicians
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (physician == null)
             {
@@ -73,7 +73,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var physician = await _context.Physician.FindAsync(id);
+            var physician = await _context.Physicians.FindAsync(id);
             if (physician == null)
             {
                 return NotFound();
@@ -124,7 +124,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var physician = await _context.Physician
+            var physician = await _context.Physicians
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (physician == null)
             {
@@ -139,15 +139,15 @@ namespace HealthcareApplications.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var physician = await _context.Physician.FindAsync(id);
-            _context.Physician.Remove(physician);
+            var physician = await _context.Physicians.FindAsync(id);
+            _context.Physicians.Remove(physician);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PhysicianExists(int id)
         {
-            return _context.Physician.Any(e => e.Id == id);
+            return _context.Physicians.Any(e => e.Id == id);
         }
     }
 }

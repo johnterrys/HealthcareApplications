@@ -14,6 +14,6 @@ namespace HealthcareApplications.Data
         {
         }
 
-        public DbSet<Physician> Physician { get; set; }
+        public DbSet<Physician> Physicians { get; set; }
     }
 }
