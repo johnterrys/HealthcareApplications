@@ -15,8 +15,8 @@ namespace HealthcareApplications.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserContext _userContext;
-        private readonly PatientContext _patientContext;
+        private  UserContext _userContext;
+        private  PatientContext _patientContext;
 
         Random random;
         private List<String> SecurityQuestions = new List<string>{ "What is your mother's maiden name?",
@@ -72,7 +72,7 @@ namespace HealthcareApplications.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(User enteredUser)
+        public async Task<ActionResult> LoginAsync(User enteredUser)
         {
             if (ModelState.IsValid)
             {
@@ -83,7 +83,14 @@ namespace HealthcareApplications.Controllers
                 var foundUser = _userContext.Users.FirstOrDefault(a => a.Username.Equals(enteredUser.Username));
                 if (foundUser == null)
                 {
+                    HttpContext.Session.SetString("Username", "");
                     HttpContext.Session.SetString(SecurityQuestionNum, "0");
+                    return View();
+                }
+                if(foundUser.AccountStatus != 1)
+                {
+                    HttpContext.Session.SetString("Username", "");
+                    HttpContext.Session.SetString(SecurityQuestionNum, "4");
                     return View();
                 }
                 //No security question responses, so check if password is correct
@@ -131,7 +138,11 @@ namespace HealthcareApplications.Controllers
                    HttpContext.Session.GetString(SecurityQuestionsAttempted).Contains("2") &&
                    HttpContext.Session.GetString(SecurityQuestionsAttempted).Contains("3"))
                 {
-                    HttpContext.Session.SetString(SecurityQuestionNum, "0");
+                    HttpContext.Session.SetString(SecurityQuestionNum, "4");
+                    foundUser.AccountStatus = -1;
+
+                    _userContext.Update(foundUser);
+                    await _userContext.SaveChangesAsync();
                     return View();
                 }
                 //select a q, check that q hasn't been attempted, send to that question

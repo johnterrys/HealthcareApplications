@@ -27,12 +27,12 @@
                     <td>@Html.TextBoxFor(a => a.Username)</td>
                 }
                 @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
-                    HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
-                    HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+                   HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
+                   HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
                 {
                     <td><text>@HttpContextAccessor.HttpContext.Session.GetString("Username")</text></td>
                 }
-            <td>@Html.ValidationMessageFor(a => a.Username)</td>
+                <td>@Html.ValidationMessageFor(a => a.Username)</td>
             </tr>
 
             @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
@@ -78,8 +78,8 @@
             }
 
             @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
-           HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
-           HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+          HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
+          HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
             {
                 <tr>
                     <td>
@@ -89,4 +89,9 @@
             }
         </table>
     </fieldset>
+}
+
+@if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("4"))
+{
+    <h1>Your account has been locked. Please contact an administrator.</h1>
 }
