@@ -8,19 +8,20 @@ using Microsoft.Extensions.Logging;
 using HealthcareApplications.Models;
 using HealthcareApplications.Models.UserModels;
 using HealthcareApplications.Data;
+using Microsoft.AspNetCore.Http;
 
 namespace HealthcareApplications.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly UserContext _context;
-        private User loggedIn;
-        public HomeController(ILogger<HomeController> logger, UserContext context)
+        private readonly UserContext _userContext;
+        private readonly PatientContext _patientContext;
+        public HomeController(ILogger<HomeController> logger, UserContext context, PatientContext patientContext)
         {
             _logger = logger;
-            _context = context;
-            loggedIn = null;
+            _userContext = context;
+            _patientContext = patientContext;
         }
 
         public IActionResult Index()
@@ -55,14 +56,13 @@ namespace HealthcareApplications.Controllers
         {
             if (ModelState.IsValid)
             {
-                var foundUser = _context.Users.First(a => a.Username.Equals(objUser.Username) && a.Password.Equals(a.Password));
+                var foundUser = _userContext.Users.First(a => a.Username.Equals(objUser.Username) && a.Password.Equals(a.Password));
                 if (foundUser != null)
                 {
-                    //Session["UserID"] = obj.UserId.ToString();
-                    //Session["UserName"] = obj.UserName.ToString();
-                    loggedIn = foundUser;
+                    bool isPatient = _patientContext.Patients.FirstOrDefault(a => a.UserId == foundUser.Id) != null;
+                    HttpContext.Session.SetString("Username", foundUser.Username);
+                    HttpContext.Session.SetString("Role", isPatient ? "Patient" : "Physician") ;
                     return RedirectToAction("UserDashBoard");
-
                 }
             }
             return View(objUser);
@@ -70,7 +70,7 @@ namespace HealthcareApplications.Controllers
 
         public ActionResult UserDashBoard()
         {
-            if (loggedIn != null)
+            if (HttpContext.Session.GetString("Username") != null)
             {
                 return View();
             }
