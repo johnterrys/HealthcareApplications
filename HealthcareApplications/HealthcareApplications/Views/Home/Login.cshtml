@@ -1,5 +1,6 @@
 ﻿@model HealthcareApplications.Models.UserModels.User
-
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 @{
     ViewBag.Title = "Login";
@@ -24,24 +25,66 @@
                 <td>@Html.TextBoxFor(a => a.Username)</td>
                 <td>@Html.ValidationMessageFor(a => a.Username)</td>
             </tr>
+
+            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
+            {
+                <tr>
+                    <td>
+                        @Html.LabelFor(a => a.Password)
+                    </td>
+                    <td>
+                        @Html.PasswordFor(a => a.Password)
+                    </td>
+                    <td>
+                        @Html.ValidationMessageFor(a => a.Password)
+                    </td>
+                </tr>
+            }
             <tr>
-                <td>
-                    @Html.LabelFor(a => a.Password)
-                </td>
-                <td>
-                    @Html.PasswordFor(a => a.Password)
-                </td>
-                <td>
-                    @Html.ValidationMessageFor(a => a.Password)
-                </td>
+                @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
+                {
+                    <td>
+                        <input type="submit" value="Login" />
+                    </td>
+                }
             </tr>
-            <tr>
-                <td></td>
-                <td>
-                    <input type="submit" value="Login" />
-                </td>
-                <td></td>
-            </tr>
+            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1"))
+            {
+                <tr>
+                    <text>@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</text>
+                    <td>@Html.TextBoxFor(a => a.SecQ1Response)</td>
+                    <td>@Html.ValidationMessageFor(a => a.SecQ1Response)</td>
+                </tr>
+            }
+
+            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2"))
+            {
+                <tr>
+                    <text>@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</text>
+                    <td>@Html.TextBoxFor(a => a.SecQ2Response)</td>
+                    <td>@Html.ValidationMessageFor(a => a.SecQ2Response)</td>
+                </tr>
+            }
+
+            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+            {
+                <tr>
+                    <text>@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</text>
+                    <td>@Html.TextBoxFor(a => a.SecQ3Response)</td>
+                    <td>@Html.ValidationMessageFor(a => a.SecQ3Response)</td>
+                </tr>
+            }
+
+            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
+             HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
+             HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+            {
+                <tr>
+                    <td>
+                        <input type="submit" value="Verify" />
+                    </td>
+                </tr>
+            }
         </table>
     </fieldset>
-}  
+}
