@@ -189,5 +189,13 @@ namespace HealthcareApplications.Controllers
                 return RedirectToAction("Login");
             }
         }
+
+        public ActionResult LogOut()
+        {
+            HttpContext.Session.SetString("Username", "");
+            HttpContext.Session.SetString(SecurityQuestionNum, "0");
+            HttpContext.Session.SetString(SecurityQuestionsAttempted, "");
+            return RedirectToAction("Login");
+        }
     }
 }
