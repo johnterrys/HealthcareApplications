@@ -76,6 +76,10 @@ namespace HealthcareApplications.Controllers
         {
             if (ModelState.IsValid)
             {
+                if(enteredUser.Username == null)
+                {
+                    enteredUser.Username = HttpContext.Session.GetString("Username");
+                }
                 var foundUser = _userContext.Users.FirstOrDefault(a => a.Username.Equals(enteredUser.Username));
                 if (foundUser == null)
                 {
@@ -91,6 +95,7 @@ namespace HealthcareApplications.Controllers
                         int nextQuestionNum = random.Next(1, 4);
                         HttpContext.Session.SetString(SecurityQuestionNum, nextQuestionNum.ToString());
                         HttpContext.Session.SetString(SecurityQuestionsAttempted, nextQuestionNum.ToString());
+                        HttpContext.Session.SetString("Username", foundUser.Username);
 
                         switch (nextQuestionNum)
                         {
@@ -116,7 +121,6 @@ namespace HealthcareApplications.Controllers
                    (enteredUser.SecQ3Response != null && enteredUser.SecQ3Response.Equals(foundUser.SecQ3Response)))
                 {
                     bool isPatient = _patientContext.Patients.FirstOrDefault(a => a.UserId == foundUser.Id) != null;
-                    HttpContext.Session.SetString("Username", foundUser.Username);
                     HttpContext.Session.SetString("Role", isPatient ? "Patient" : "Physician");
                     //send to user dashboard ;
                     return RedirectToAction("UserDashBoard");
