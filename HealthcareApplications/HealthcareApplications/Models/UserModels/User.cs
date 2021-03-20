@@ -9,9 +9,13 @@ namespace HealthcareApplications.Models.UserModels
     {
         public int Id { get; set; }
         public String Username { get; set; }
-        public String SecQ1Index { get; set; }
-        public String SecQ2Index { get; set; }
-        public String SecQ3Index { get; set; }
+        public String Password { get; set; }
+        public int SecQ1Index { get; set; }
+        public String SecQ1Response { get; set; }
+        public int SecQ2Index { get; set; }
+        public String SecQ2Response { get; set; }
+        public int SecQ3Index { get; set; }
+        public String SecQ3Response { get; set; }
         public int AccountStatus { get; set; }
     }
 }

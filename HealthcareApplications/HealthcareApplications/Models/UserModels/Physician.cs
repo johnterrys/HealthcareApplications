@@ -13,6 +13,7 @@ namespace HealthcareApplications.Models
         public int Id { get; set; }
         public Patient[] Patients { get; set; }
         public int LicenseNumber { get; set; }
+        public int UserId { get; set; }
         #endregion
 
         #region Methods
