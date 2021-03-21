@@ -121,6 +121,7 @@ namespace HealthcareApplications.Controllers
 
                         return View(enteredUser);
                     }
+                    return View(enteredUser);
                 }
                 //Check if any are right
                 if((enteredUser.SecQ1Response != null && enteredUser.SecQ1Response.Equals(foundUser.SecQ1Response)) ||
