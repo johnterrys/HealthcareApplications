@@ -1,0 +1,78 @@
+﻿@model HealthcareApplications.Models.UserModels.User
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Username)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Username)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Password)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Password)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Salt)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Salt)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AccountStatus)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AccountStatus)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SecQ1Index)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SecQ1Index)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SecQ1Response)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SecQ1Response)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SecQ2Index)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SecQ2Index)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SecQ2Response)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SecQ2Response)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SecQ3Index)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SecQ3Index)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SecQ3Response)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SecQ3Response)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

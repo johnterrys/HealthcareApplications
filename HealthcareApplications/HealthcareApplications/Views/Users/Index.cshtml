@@ -1,0 +1,89 @@
+﻿@model IEnumerable<HealthcareApplications.Models.UserModels.User>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Username)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Salt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AccountStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecQ1Index)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecQ1Response)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecQ2Index)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecQ2Response)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecQ3Index)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecQ3Response)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Username)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Salt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AccountStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecQ1Index)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecQ1Response)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecQ2Index)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecQ2Response)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecQ3Index)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecQ3Response)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

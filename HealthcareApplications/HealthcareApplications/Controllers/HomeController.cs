@@ -9,14 +9,16 @@ using HealthcareApplications.Models;
 using HealthcareApplications.Models.UserModels;
 using HealthcareApplications.Data;
 using Microsoft.AspNetCore.Http;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace HealthcareApplications.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private  UserContext _userContext;
-        private  PatientContext _patientContext;
+        private UserContext _userContext;
+        private PatientContext _patientContext;
 
         Random random;
         private List<String> SecurityQuestions = new List<string>{ "What is your mother's maiden name?",
@@ -44,7 +46,9 @@ namespace HealthcareApplications.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            HttpContext.Session.SetString(SecurityQuestionNum, "0");
+            HttpContext.Session.SetString(SecurityQuestionsAttempted, "");
+            return View("Login");
         }
 
         public IActionResult Privacy()
@@ -76,7 +80,7 @@ namespace HealthcareApplications.Controllers
         {
             if (ModelState.IsValid)
             {
-                if(enteredUser.Username == null)
+                if (enteredUser.Username == null)
                 {
                     enteredUser.Username = HttpContext.Session.GetString("Username");
                 }
@@ -87,16 +91,16 @@ namespace HealthcareApplications.Controllers
                     HttpContext.Session.SetString(SecurityQuestionNum, "0");
                     return View();
                 }
-                if(foundUser.AccountStatus != 1)
+                if (foundUser.AccountStatus != 1)
                 {
                     HttpContext.Session.SetString("Username", "");
                     HttpContext.Session.SetString(SecurityQuestionNum, "4");
                     return View();
                 }
                 //No security question responses, so check if password is correct
-                if(enteredUser.SecQ1Response == null && enteredUser.SecQ2Response == null && enteredUser.SecQ3Response == null)
+                if (enteredUser.SecQ1Response == null && enteredUser.SecQ2Response == null && enteredUser.SecQ3Response == null)
                 {
-                    if(foundUser.Password.Equals(enteredUser.Password))
+                    if (foundUser.Password.Equals(enteredUser.Password))
                     {
                         //send to first security question
                         int nextQuestionNum = random.Next(1, 4);
@@ -124,8 +128,8 @@ namespace HealthcareApplications.Controllers
                     return View(enteredUser);
                 }
                 //Check if any are right
-                if((enteredUser.SecQ1Response != null && enteredUser.SecQ1Response.Equals(foundUser.SecQ1Response)) ||
-                   (enteredUser.SecQ2Response != null && enteredUser.SecQ2Response.Equals(foundUser.SecQ2Response)) || 
+                if ((enteredUser.SecQ1Response != null && enteredUser.SecQ1Response.Equals(foundUser.SecQ1Response)) ||
+                   (enteredUser.SecQ2Response != null && enteredUser.SecQ2Response.Equals(foundUser.SecQ2Response)) ||
                    (enteredUser.SecQ3Response != null && enteredUser.SecQ3Response.Equals(foundUser.SecQ3Response)))
                 {
                     bool isPatient = _patientContext.Patients.FirstOrDefault(a => a.UserId == foundUser.Id) != null;
@@ -135,7 +139,7 @@ namespace HealthcareApplications.Controllers
                 }
 
                 //Check if all are wrong, lock account
-                if(HttpContext.Session.GetString(SecurityQuestionsAttempted).Contains("1") &&
+                if (HttpContext.Session.GetString(SecurityQuestionsAttempted).Contains("1") &&
                    HttpContext.Session.GetString(SecurityQuestionsAttempted).Contains("2") &&
                    HttpContext.Session.GetString(SecurityQuestionsAttempted).Contains("3"))
                 {
@@ -188,6 +192,18 @@ namespace HealthcareApplications.Controllers
 
             }
             return View(enteredUser);
+        }
+
+        private string HashPassword(string password, string salt)
+        {
+            // SHA512 is disposable by inheritance.  
+            using (var sha256 = SHA256.Create())
+            {
+                // Send a sample text to hash.  
+                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password + salt));
+                // Get the hashed string.  
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+            }
         }
 
         public ActionResult UserDashBoard()

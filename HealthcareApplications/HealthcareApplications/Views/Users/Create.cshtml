@@ -1,0 +1,78 @@
+﻿@model HealthcareApplications.Models.UserModels.User
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>User</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Username" class="control-label"></label>
+                <input asp-for="Username" class="form-control" />
+                <span asp-validation-for="Username" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Password" class="control-label"></label>
+                <input asp-for="Password" class="form-control" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Salt" class="control-label"></label>
+                <input asp-for="Salt" class="form-control" />
+                <span asp-validation-for="Salt" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AccountStatus" class="control-label"></label>
+                <input asp-for="AccountStatus" class="form-control" />
+                <span asp-validation-for="AccountStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecQ1Index" class="control-label"></label>
+                <input asp-for="SecQ1Index" class="form-control" />
+                <span asp-validation-for="SecQ1Index" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecQ1Response" class="control-label"></label>
+                <input asp-for="SecQ1Response" class="form-control" />
+                <span asp-validation-for="SecQ1Response" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecQ2Index" class="control-label"></label>
+                <input asp-for="SecQ2Index" class="form-control" />
+                <span asp-validation-for="SecQ2Index" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecQ2Response" class="control-label"></label>
+                <input asp-for="SecQ2Response" class="form-control" />
+                <span asp-validation-for="SecQ2Response" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecQ3Index" class="control-label"></label>
+                <input asp-for="SecQ3Index" class="form-control" />
+                <span asp-validation-for="SecQ3Index" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecQ3Response" class="control-label"></label>
+                <input asp-for="SecQ3Response" class="form-control" />
+                <span asp-validation-for="SecQ3Response" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
