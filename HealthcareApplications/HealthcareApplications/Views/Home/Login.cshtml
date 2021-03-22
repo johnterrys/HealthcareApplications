@@ -5,84 +5,94 @@
 @{
     ViewBag.Title = "Login";
 }
+<div class="text-center">
+    <img class="mx-auto d-block" src="~/lib/healthcarelogogood.png">
+</div>
+<div class="container">
+    <h2 class="text-center">Healthcare Application Login</h2>
+    <div class="card">
+        <div class="card-body">
+            @using (Html.BeginForm("Login", "Home", FormMethod.Post))
+            {
+                <fieldset class="text-center">
 
-@using (Html.BeginForm("Login", "Home", FormMethod.Post))
-{
-    <fieldset class="text-center">
-        <legend>Healthcare Application Login</legend>
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true)
+                    @if (@ViewBag.Message != null)
+                    {
+                        <div style="border: 1px solid red">
+                            @ViewBag.Message
+                        </div>
+                    }
 
-        @Html.AntiForgeryToken()
-        @Html.ValidationSummary(true)
-        @if (@ViewBag.Message != null)
-        {
-            <div style="border: 1px solid red">
-                @ViewBag.Message
-            </div>
-        }
+                    <div class="form-outline mb-4">
+                        @Html.LabelFor(a => a.Username, new { @class = "form-label" })
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
+                        {
+                            @Html.TextBoxFor(a => a.Username, new { @class = "form-control" })
+                        }
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
+                  HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
+                  HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+                        {
+                            <text>@HttpContextAccessor.HttpContext.Session.GetString("Username")</text>
+                        }
+                        @Html.ValidationMessageFor(a => a.Username)
+                    </div>
 
-        <div class="form-outline mb-4">
-            @Html.LabelFor(a => a.Username, new { @class="form-label" })
-            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
-            {
-                @Html.TextBoxFor(a => a.Username, new { @class = "form-control" })
-            }
-            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
-         HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
-         HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
-            {
-                <text>@HttpContextAccessor.HttpContext.Session.GetString("Username")</text>
-            }
-            @Html.ValidationMessageFor(a => a.Username)
-        </div>
+                    <div class="form-outline mb-4">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
+                        {
+                            @Html.LabelFor(a => a.Password, new { @class = "form-label" })
+                            @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a.Password)
+                        }
 
-        <div class="form-outline mb-4">
-            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
-            {
-                @Html.LabelFor(a => a.Password, new { @class = "form-label" })
-                @Html.PasswordFor(a => a.Password, new { @class = "form-control" })
-                @Html.ValidationMessageFor(a => a.Password)
-            }
+                    </div>
 
+                    @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
+                    {
+                        <input type="submit" value="Login" class="btn btn-primary btn-block" />
+                    }
+                    <div class="form-outline mb-4">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1"))
+                        {
+                            <label class="form-label">@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</label>
+                            @Html.TextBoxFor(a => a.SecQ1Response, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a.SecQ1Response)
+                        }
+                    </div>
+                    <div class="form-outline mb-4">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2"))
+                        {
+                            <label class="form-label">@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</label>
+                            @Html.TextBoxFor(a => a.SecQ2Response, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a.SecQ2Response)
+                        }
+                    </div>
+                    <div class="form-outline mb-4">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+                        {
+                            <label class="form-label">@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</label>
+                            @Html.TextBoxFor(a => a.SecQ3Response, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(a => a.SecQ3Response)
+                        }
+                    </div>
+                    <div class="form-outline mb-4">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
+            HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
+            HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+                        {
+                            <input type="submit" value="Verify" class="btn btn-primary btn-block" />
+                        }
+                    </div>
+                </fieldset>
+            }
         </div>
+    </div>
+</div>
 
-        @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("0"))
-        {
-            <input type="submit" value="Login" class="btn btn-primary btn-block" />
-        }
-        <div class="form-outline mb-4">
-            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1"))
-            {
-                <label class="form-label">@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</label>
-                @Html.TextBoxFor(a => a.SecQ1Response, new { @class = "form-control" })
-                @Html.ValidationMessageFor(a => a.SecQ1Response)
-            }
-        </div>
-        <div class="form-outline mb-4">
-            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2"))
-            {
-                <label class="form-label">@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</label>
-                @Html.TextBoxFor(a => a.SecQ2Response, new { @class = "form-control" })
-                @Html.ValidationMessageFor(a => a.SecQ2Response)
-            }
-        </div>
-        <div class="form-outline mb-4">
-            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
-            {
-                <label class="form-label">@HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionText")</label>
-                @Html.TextBoxFor(a => a.SecQ3Response, new { @class = "form-control" })
-                @Html.ValidationMessageFor(a => a.SecQ3Response)
-            }
-        </div>
-        <div class="form-outline mb-4">
-            @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
-   HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
-   HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
-            {
-                <input type="submit" value="Verify" class="btn btn-primary btn-block" />
-            }
-        </div>
-    </fieldset>
-}
+
 
 @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("4"))
 {
