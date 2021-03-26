@@ -4,6 +4,7 @@
 
 @{
     ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_LoginLayout.cshtml";
 }
 <div class="text-center">
     <img class="mx-auto d-block" src="~/lib/healthcarelogogood.png">
@@ -32,8 +33,8 @@
                             @Html.TextBoxFor(a => a.Username, new { @class = "form-control" })
                         }
                         @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
-                  HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
-                  HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+                 HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
+                 HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
                         {
                             <text>@HttpContextAccessor.HttpContext.Session.GetString("Username")</text>
                         }
@@ -80,8 +81,8 @@
                     </div>
                     <div class="form-outline mb-4">
                         @if (HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("1") ||
-            HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
-            HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
+           HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("2") ||
+           HttpContextAccessor.HttpContext.Session.GetString("SecurityQuestionNum").Equals("3"))
                         {
                             <input type="submit" value="Verify" class="btn btn-primary btn-block" />
                         }
