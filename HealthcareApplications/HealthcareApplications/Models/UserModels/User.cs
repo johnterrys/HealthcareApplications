@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,6 +18,7 @@ namespace HealthcareApplications.Models.UserModels
         public string SecQ2Response { get; set; }
         public int SecQ3Index { get; set; }
         public string SecQ3Response { get; set; }
+       [DisplayName("Account Status")]
         public int AccountStatus { get; set; }
     }
 }

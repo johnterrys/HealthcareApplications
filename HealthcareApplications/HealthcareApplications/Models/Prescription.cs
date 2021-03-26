@@ -11,10 +11,9 @@ namespace HealthcareApplications.Models
         public int Id { get; set; }
 
         public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public Physician PrescribingPhysician { get; set; }
-        public Patient PrescribedPatient { get; set; }
-        public Drug PrescribedDrug { get; set; }
+        public int PrescribingPhysicianId { get; set; }
+        public int PrescribedPatientId { get; set; }
+        public int PrescribedDrugId { get; set; }
         public int Quantity { get; set; }
         public String Dosage { get; set; }
         public int RefillCount { get; set; }
