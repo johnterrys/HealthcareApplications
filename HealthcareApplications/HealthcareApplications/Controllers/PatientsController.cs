@@ -85,7 +85,7 @@ namespace HealthcareApplications.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Name,Id,DateOfBirth,Address,PhysicianId")] Patient patient)
+        public async Task<IActionResult> Create([Bind("UserId,Name,Id,DateOfBirth,Address,PhysicianId")] Patient patient)
         {
             if (ModelState.IsValid)
             {
@@ -128,7 +128,12 @@ namespace HealthcareApplications.Controllers
             {
                 try
                 {
-                    _patientContext.Update(patient);
+                    var p = _patientContext.Patients.FirstOrDefault(a => a.Id == id);
+                    p.Name = patient.Name;
+                    p.DateOfBirth = patient.DateOfBirth;
+                    p.Address = patient.Address;
+                    p.PhysicianId = patient.PhysicianId;
+                    _patientContext.Update(p);
                     await _patientContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

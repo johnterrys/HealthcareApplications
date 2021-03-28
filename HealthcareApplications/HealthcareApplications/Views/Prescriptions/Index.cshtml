@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HealthcareApplications.Models.Prescription>
+﻿@model HealthcareApplications.Models.PatientsPrescriptionsViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -9,35 +9,45 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-controller="Prescriptions" asp-action="Index" method="get">
+    <p>
+        Patient: <select asp-for="SearchPatientId" asp-items="Model.Patients">
+            <option value="">All</option>
+        </select>
+
+        Prescription: <input type="text" asp-for="SearchPrescription" />
+        <input type="submit" value="Filter" />
+    </p>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.StartDate)
+                @Html.DisplayNameFor(model => model.Prescriptions[0].StartDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescribingPhysicianId)
+                @Html.DisplayNameFor(model => model.Prescriptions[0].PrescribingPhysicianId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescribedPatientId)
+                @Html.DisplayNameFor(model => model.Prescriptions[0].PrescribedPatientId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PrescribedDrugId)
+                @Html.DisplayNameFor(model => model.Prescriptions[0].PrescribedDrugId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Quantity)
+                @Html.DisplayNameFor(model => model.Prescriptions[0].Quantity)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Dosage)
+                @Html.DisplayNameFor(model => model.Prescriptions[0].Dosage)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.RefillCount)
+                @Html.DisplayNameFor(model => model.Prescriptions[0].RefillCount)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Prescriptions) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)

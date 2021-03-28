@@ -36,6 +36,9 @@
         </dd>
     </dl>
 </div>
+<h4>Prescriptions</h4>
+@await Component.InvokeAsync("PrescriptionsList", new { searchPatientId = Model.Id.ToString(), searchPrescription = "" })
+
 <div>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     <a asp-action="Index">Back to List</a>

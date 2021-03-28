@@ -12,17 +12,48 @@ namespace HealthcareApplications.Controllers
 {
     public class PrescriptionsController : Controller
     {
-        private readonly PrescriptionContext _context;
+        private readonly PrescriptionContext _prescriptionContext;
+        private readonly PatientContext _patientContext;
+        private readonly DrugContext _drugContext;
 
-        public PrescriptionsController(PrescriptionContext context)
+        public PrescriptionsController(PrescriptionContext context, PatientContext patientContext, DrugContext drugContext)
         {
-            _context = context;
+            _prescriptionContext = context;
+            _patientContext = patientContext;
+            _drugContext = drugContext;
         }
 
         // GET: Prescriptions
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchPatientId, string searchPrescription)
         {
-            return View(await _context.Prescriptions.ToListAsync());
+            List<SelectListItem> patients = _patientContext.Patients
+                                                             .Select(p => new SelectListItem()
+                                                             {
+                                                                 Value = p.Id.ToString(),
+                                                                 Text = p.Name
+                                                             })
+                                                              .ToList();
+
+            var prescriptions = from m in _prescriptionContext.Prescriptions
+                           select m;
+
+            if (!string.IsNullOrEmpty(searchPrescription))
+            {
+                prescriptions = prescriptions.Where(s => s.Id.ToString() == searchPrescription || _drugContext.Drugs.Find(s.PrescribedDrugId).Name.Contains(searchPrescription));
+            }
+
+            if (!string.IsNullOrEmpty(searchPatientId))
+            {
+                prescriptions = prescriptions.Where(x => x.PrescribedPatientId.ToString() == searchPatientId);
+            }
+
+            var vm = new PatientsPrescriptionsViewModel
+            {
+                Patients = new SelectList(patients, "Value", "Text"),
+                Prescriptions = await prescriptions.ToListAsync()
+            };
+
+            return View(vm);
         }
 
         // GET: Prescriptions/Details/5
@@ -33,7 +64,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var prescription = await _context.Prescriptions
+            var prescription = await _prescriptionContext.Prescriptions
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (prescription == null)
             {
@@ -58,8 +89,8 @@ namespace HealthcareApplications.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(prescription);
-                await _context.SaveChangesAsync();
+                _prescriptionContext.Add(prescription);
+                await _prescriptionContext.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(prescription);
@@ -73,7 +104,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var prescription = await _context.Prescriptions.FindAsync(id);
+            var prescription = await _prescriptionContext.Prescriptions.FindAsync(id);
             if (prescription == null)
             {
                 return NotFound();
@@ -97,8 +128,8 @@ namespace HealthcareApplications.Controllers
             {
                 try
                 {
-                    _context.Update(prescription);
-                    await _context.SaveChangesAsync();
+                    _prescriptionContext.Update(prescription);
+                    await _prescriptionContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -124,7 +155,7 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var prescription = await _context.Prescriptions
+            var prescription = await _prescriptionContext.Prescriptions
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (prescription == null)
             {
@@ -139,15 +170,15 @@ namespace HealthcareApplications.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var prescription = await _context.Prescriptions.FindAsync(id);
-            _context.Prescriptions.Remove(prescription);
-            await _context.SaveChangesAsync();
+            var prescription = await _prescriptionContext.Prescriptions.FindAsync(id);
+            _prescriptionContext.Prescriptions.Remove(prescription);
+            await _prescriptionContext.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool PrescriptionExists(int id)
         {
-            return _context.Prescriptions.Any(e => e.Id == id);
+            return _prescriptionContext.Prescriptions.Any(e => e.Id == id);
         }
     }
 }

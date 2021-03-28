@@ -19,6 +19,7 @@ namespace HealthcareApplications.Controllers
         private readonly ILogger<HomeController> _logger;
         private UserContext _userContext;
         private PatientContext _patientContext;
+        private PhysicianContext _physicianContext;
 
         Random random;
         private List<String> SecurityQuestions = new List<string>{ "What is your mother's maiden name?",
@@ -36,11 +37,12 @@ namespace HealthcareApplications.Controllers
         private const string SecurityQuestionText = "SecurityQuestionText";
         private const string SecurityQuestionsAttempted = "SecurityQuestionsAttempted";
 
-        public HomeController(ILogger<HomeController> logger, UserContext context, PatientContext patientContext)
+        public HomeController(ILogger<HomeController> logger, UserContext context, PatientContext patientContext, PhysicianContext physicianContext)
         {
             _logger = logger;
             _userContext = context;
             _patientContext = patientContext;
+            _physicianContext = physicianContext;
             random = new Random();
         }
 
@@ -134,6 +136,16 @@ namespace HealthcareApplications.Controllers
                 {
                     bool isPatient = _patientContext.Patients.FirstOrDefault(a => a.UserId == foundUser.Id) != null;
                     HttpContext.Session.SetString("Role", isPatient ? "Patient" : "Physician");
+                    if (isPatient)
+                    {
+                        var patient = _patientContext.Patients.FirstOrDefault(a => a.UserId == foundUser.Id);
+                        HttpContext.Session.SetString("PatientId", patient.Id.ToString());
+                    }
+                    else
+                    {
+                        var physician = _physicianContext.Physicians.FirstOrDefault(a => a.UserId == foundUser.Id);
+                        HttpContext.Session.SetString("PhysicianId", physician.Id.ToString());
+                    }
                     //send to user dashboard ;
                     return RedirectToAction("UserDashBoard");
                 }
@@ -223,6 +235,9 @@ namespace HealthcareApplications.Controllers
             HttpContext.Session.SetString("Username", "");
             HttpContext.Session.SetString(SecurityQuestionNum, "0");
             HttpContext.Session.SetString(SecurityQuestionsAttempted, "");
+            HttpContext.Session.SetString("Role", "");
+            HttpContext.Session.SetString("PatientId", "");
+            HttpContext.Session.SetString("PhysicianId", "");
             return RedirectToAction("Login");
         }
     }
