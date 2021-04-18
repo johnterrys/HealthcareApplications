@@ -45,10 +45,17 @@ namespace HealthcareApplications.Components
                 patients = patients.Where(x => x.PhysicianId.ToString() == searchPhysician);
             }
 
+            var patientList = await patients.ToListAsync();
+
+            foreach (Patient patient in patientList)
+            {
+                patient.Physician = _physicianContext.Physicians.Find(patient.PhysicianId);
+            }
+
             var vm = new PatientsPhysicianViewModel
             {
                 Physicians = new SelectList(physicians, "Value", "Text"),
-                Patients = await patients.ToListAsync()
+                Patients = patientList
             };
 
             return View(vm);

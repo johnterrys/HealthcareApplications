@@ -47,10 +47,17 @@ namespace HealthcareApplications.Controllers
                 patients = patients.Where(x => x.PhysicianId.ToString() == searchPhysician);
             }
 
+            var patientList = await patients.ToListAsync();
+
+            foreach (Patient patient in patientList)
+            {
+                patient.Physician = _physicianContext.Physicians.Find(patient.PhysicianId);
+            }
+
             var vm = new PatientsPhysicianViewModel
             {
                 Physicians = new SelectList(physicians, "Value", "Text"),
-                Patients = await patients.ToListAsync()
+                Patients = patientList
             };
 
             return View(vm);
@@ -64,12 +71,13 @@ namespace HealthcareApplications.Controllers
                 return NotFound();
             }
 
-            var patient = await _patientContext.Patients
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var patient = await _patientContext.Patients.FirstOrDefaultAsync(m => m.Id == id);
             if (patient == null)
             {
                 return NotFound();
             }
+
+            patient.Physician = _physicianContext.Physicians.Find(patient.PhysicianId);
 
             return View(patient);
         }

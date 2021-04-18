@@ -1,0 +1,41 @@
+﻿@model HealthcareApplications.Models.PrescriptionsPrescriptionDrugsViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Microsoft.AspNetCore.Http
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionDrugs[0].Drug.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionDrugs[0].Quantity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionDrugs[0].Dosage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrescriptionDrugs[0].RefillCount)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.PrescriptionDrugs)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Drug.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dosage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RefillCount)
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+

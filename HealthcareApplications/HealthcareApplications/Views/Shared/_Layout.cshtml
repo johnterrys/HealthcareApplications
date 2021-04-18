@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -8,7 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <header >
+    <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-danger border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand text-light" asp-area="" asp-controller="Home" asp-action="UserDashBoard">Healthcare</a>
@@ -17,7 +20,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                    <ul class="navbar-nav flex-grow-1">
+                    <ul class="navbar-nav flex-grow-1 align-items-baseline">
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="UserDashBoard">Home</a>
                         </li>
@@ -26,10 +29,16 @@
                                 Patients
                             </a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item mr-auto">
                             <a class="nav-link text-light" asp-area="" asp-controller="Physicians" asp-action="Index">
                                 Physicians
                             </a>
+                        </li>
+                        <li>
+                            <label class="text-light d-sm-inline-flex ">Welcome, @HttpContextAccessor.HttpContext.Session.GetString("Username").ToString()</label>
+                        </li>
+                        <li>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="LogOut">Log out</a>
                         </li>
                     </ul>
                 </div>

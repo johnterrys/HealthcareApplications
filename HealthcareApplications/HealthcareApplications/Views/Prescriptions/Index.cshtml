@@ -1,4 +1,4 @@
-﻿@model HealthcareApplications.Models.PatientsPrescriptionsViewModel
+﻿@model IEnumerable<HealthcareApplications.Models.Prescription>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,45 +9,23 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<form asp-controller="Prescriptions" asp-action="Index" method="get">
-    <p>
-        Patient: <select asp-for="SearchPatientId" asp-items="Model.Patients">
-            <option value="">All</option>
-        </select>
-
-        Prescription: <input type="text" asp-for="SearchPrescription" />
-        <input type="submit" value="Filter" />
-    </p>
-</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Prescriptions[0].StartDate)
+                @Html.DisplayNameFor(model => model.StartDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Prescriptions[0].PrescribingPhysicianId)
+                @Html.DisplayNameFor(model => model.PrescribingPhysicianId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Prescriptions[0].PrescribedPatientId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prescriptions[0].PrescribedDrugId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prescriptions[0].Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prescriptions[0].Dosage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Prescriptions[0].RefillCount)
+                @Html.DisplayNameFor(model => model.PrescribedPatientId)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Prescriptions) {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.StartDate)
@@ -57,18 +35,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PrescribedPatientId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PrescribedDrugId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Dosage)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.RefillCount)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

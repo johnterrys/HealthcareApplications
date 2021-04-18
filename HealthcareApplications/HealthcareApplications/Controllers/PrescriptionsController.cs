@@ -13,71 +13,72 @@ namespace HealthcareApplications.Controllers
     public class PrescriptionsController : Controller
     {
         private readonly PrescriptionContext _prescriptionContext;
-        private readonly PatientContext _patientContext;
+        private readonly PatientContext _patientContex;
+        private readonly PrescriptionDrugContext _prescriptionDrugContext;
         private readonly DrugContext _drugContext;
+        private readonly PhysicianContext _physicianContext;
 
-        public PrescriptionsController(PrescriptionContext context, PatientContext patientContext, DrugContext drugContext)
+
+        public PrescriptionsController(PrescriptionContext context, 
+            PatientContext patientContex, 
+            PrescriptionDrugContext prescriptionDrugContext,
+            DrugContext drugContext,
+            PhysicianContext physicianContext)
         {
             _prescriptionContext = context;
-            _patientContext = patientContext;
+            _patientContex = patientContex;
+            _prescriptionDrugContext = prescriptionDrugContext;
             _drugContext = drugContext;
+            _physicianContext = physicianContext;
         }
 
         // GET: Prescriptions
-        public async Task<IActionResult> Index(string searchPatientId, string searchPrescription)
+        public async Task<IActionResult> Index()
         {
-            List<SelectListItem> patients = _patientContext.Patients
-                                                             .Select(p => new SelectListItem()
-                                                             {
-                                                                 Value = p.Id.ToString(),
-                                                                 Text = p.Name
-                                                             })
-                                                              .ToList();
-
-            var prescriptions = from m in _prescriptionContext.Prescriptions
-                           select m;
-
-            if (!string.IsNullOrEmpty(searchPrescription))
-            {
-                prescriptions = prescriptions.Where(s => s.Id.ToString() == searchPrescription || _drugContext.Drugs.Find(s.PrescribedDrugId).Name.Contains(searchPrescription));
-            }
-
-            if (!string.IsNullOrEmpty(searchPatientId))
-            {
-                prescriptions = prescriptions.Where(x => x.PrescribedPatientId.ToString() == searchPatientId);
-            }
-
-            var vm = new PatientsPrescriptionsViewModel
-            {
-                Patients = new SelectList(patients, "Value", "Text"),
-                Prescriptions = await prescriptions.ToListAsync()
-            };
-
-            return View(vm);
+            return View(await _prescriptionContext.Prescriptions.ToListAsync());
         }
 
         // GET: Prescriptions/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var prescription = await _prescriptionContext.Prescriptions
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (prescription == null)
-            {
-                return NotFound();
-            }
+            var prescription = await _prescriptionContext.Prescriptions.FindAsync(id);
+            
+            if (prescription == null) return NotFound();
 
-            return View(prescription);
+            var patient = _patientContex.Patients.Find(prescription.PrescribedPatientId);
+
+            PrescriptionDetailsViewModel prescriptionDetailsViewModel = new PrescriptionDetailsViewModel()
+            {
+                PrescriptionId = prescription.Id,
+                Prescription = prescription,
+                PatientName = patient.Name,
+                PhysicianName = _physicianContext.Physicians.Find(patient.PhysicianId).Name,
+            };
+
+            return View(prescriptionDetailsViewModel);
         }
 
         // GET: Prescriptions/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create(int id) // passes in Patient ID
         {
-            return View();
+            var patient = _patientContex.Patients.Find(id);
+
+            Prescription prescription = new Prescription()
+            {
+                PrescribedPatientId = patient.Id,
+                PrescribingPhysicianId = patient.PhysicianId,
+                StartDate = DateTime.Now
+            };
+
+            _prescriptionContext.Add(prescription);
+            await _prescriptionContext.SaveChangesAsync();
+
+           
+
+
+            return RedirectToAction(nameof(Edit), new { prescription.Id});
         }
 
         // POST: Prescriptions/Create
@@ -85,7 +86,7 @@ namespace HealthcareApplications.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,StartDate,PrescribingPhysicianId,PrescribedPatientId,PrescribedDrugId,Quantity,Dosage,RefillCount")] Prescription prescription)
+        public async Task<IActionResult> Create([Bind("Id,StartDate,PrescribingPhysicianId,PrescribedPatientId")] Prescription prescription)
         {
             if (ModelState.IsValid)
             {
@@ -109,7 +110,18 @@ namespace HealthcareApplications.Controllers
             {
                 return NotFound();
             }
-            return View(prescription);
+
+            var patient = _patientContex.Patients.Find(prescription.PrescribedPatientId);
+
+            PrescriptionDetailsViewModel prescriptionDetailsViewModel = new PrescriptionDetailsViewModel()
+            {
+                PrescriptionId = prescription.Id,
+                Prescription = prescription,
+                PatientName = patient.Name,
+                PhysicianName = _physicianContext.Physicians.Find(patient.PhysicianId).Name,
+            };
+
+            return View(prescriptionDetailsViewModel);
         }
 
         // POST: Prescriptions/Edit/5
@@ -117,7 +129,7 @@ namespace HealthcareApplications.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,StartDate,PrescribingPhysicianId,PrescribedPatientId,PrescribedDrugId,Quantity,Dosage,RefillCount")] Prescription prescription)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,StartDate,PrescribingPhysicianId,PrescribedPatientId")] Prescription prescription)
         {
             if (id != prescription.Id)
             {

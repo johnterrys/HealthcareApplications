@@ -1,4 +1,4 @@
-﻿@model HealthcareApplications.Models.Prescription
+﻿@model HealthcareApplications.Models.PrescriptionDetailsViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -10,51 +10,29 @@
     <h4>Prescription</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StartDate)
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.Prescription.StartDate)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartDate)
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.Prescription.StartDate)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrescribingPhysicianId)
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.PatientName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrescribingPhysicianId)
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.PatientName)
         </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrescribedPatientId)
+        <dt class="col-sm-4">
+            @Html.DisplayNameFor(model => model.PhysicianName)
         </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrescribedPatientId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.PrescribedDrugId)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PrescribedDrugId)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Quantity)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Quantity)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Dosage)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Dosage)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RefillCount)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RefillCount)
+        <dd class="col-sm-8">
+            @Html.DisplayFor(model => model.PhysicianName)
         </dd>
     </dl>
 </div>
+<h4>Drugs</h4>
+@await Component.InvokeAsync("PrescriptionsPrescriptionDrugsList", new { Model.PrescriptionId, SearchPrescriptionDrugs = "" })
+
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Patients" asp-action="Details" asp-route-id="@Model.Prescription.PrescribedPatientId">Back to Patient</a>
 </div>
