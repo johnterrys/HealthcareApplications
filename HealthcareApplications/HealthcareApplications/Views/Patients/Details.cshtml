@@ -1,5 +1,6 @@
 ﻿@model HealthcareApplications.Models.Patient
-
+@using Microsoft.AspNetCore.Http
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Details";
 }
@@ -37,11 +38,14 @@
     </dl>
 </div>
 <h4>Prescriptions</h4>
-<div>
-    <a asp-controller="Prescriptions" asp-action="Create" asp-route-id="@Model.Id">Create Prescription</a>
-</div>
+@if (HttpContextAccessor.HttpContext.Session.GetString("Role").ToString() == "Physician")
+{
+    <div>
+        <a asp-controller="Prescriptions" asp-action="Create" asp-route-id="@Model.Id">Create Prescription</a>
+    </div>
+}
 <br />
- @await Component.InvokeAsync("PrescriptionsList", new { searchPatientId = Model.Id, searchPrescription = "" })
+@await Component.InvokeAsync("PrescriptionsList", new { searchPatientId = Model.Id, searchPrescription = "" })
 <div>
     <a asp-controller="Home" asp-action="UserDashBoard">Back to List</a>
 </div>
