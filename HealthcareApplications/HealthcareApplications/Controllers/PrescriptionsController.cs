@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareApplications.Data;
 using HealthcareApplications.Models;
+using System.Net.Http;
+using Newtonsoft.Json;
+using System.Reflection.Metadata.Ecma335;
 
 namespace HealthcareApplications.Controllers
 {
@@ -75,8 +78,24 @@ namespace HealthcareApplications.Controllers
             _prescriptionContext.Add(prescription);
             await _prescriptionContext.SaveChangesAsync();
 
-           
+            var physician = _physicianContext.Physicians.Find(prescription.PrescribingPhysicianId);
 
+            HttpClient client = new HttpClient();
+            var json = new PostPrescription()
+            {
+                Id = prescription.Id,
+                PhysicianName = physician.Name,
+                PhysicianLicenseNumber = physician.LicenseNumber.ToString(),
+                PatientName = patient.Name,
+                PatientDOB = patient.DateOfBirth,
+                PatientAddress = patient.Address,
+                IssuedDate = prescription.StartDate
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(json), System.Text.Encoding.UTF8, "application/json");
+            var content2 = new StringContent(JsonConvert.SerializeObject(prescription), System.Text.Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await client.PostAsync("https://localhost:44381/api/PrescriptionsAPI/AddPrescriptionFromHealthcare", content);
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
 
             return RedirectToAction(nameof(Edit), new { prescription.Id});
         }
