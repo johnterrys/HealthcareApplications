@@ -80,6 +80,13 @@ namespace HealthcareApplications.Controllers
 
             var physician = _physicianContext.Physicians.Find(prescription.PrescribingPhysicianId);
 
+            await SendPrescriptionToPharmacy(patient, prescription, physician);
+
+            return RedirectToAction(nameof(Edit), new { prescription.Id });
+        }
+
+        private static async Task SendPrescriptionToPharmacy(Patient patient, Prescription prescription, Physician physician)
+        {
             HttpClient client = new HttpClient();
             var json = new PostPrescription()
             {
@@ -92,12 +99,14 @@ namespace HealthcareApplications.Controllers
                 IssuedDate = prescription.StartDate
             };
             var content = new StringContent(JsonConvert.SerializeObject(json), System.Text.Encoding.UTF8, "application/json");
-            var content2 = new StringContent(JsonConvert.SerializeObject(prescription), System.Text.Encoding.UTF8, "application/json");
+#if DEBUG
             HttpResponseMessage response = await client.PostAsync("https://localhost:44381/api/PrescriptionsAPI/AddPrescriptionFromHealthcare", content);
+#else
+            HttpResponseMessage response = await client.PostAsync("http://wngcsp86.intra.uwlax.edu:8080/api/PrescriptionsAPI/AddPrescriptionFromHealthcare", content);
+#endif
+
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
-
-            return RedirectToAction(nameof(Edit), new { prescription.Id});
         }
 
         // POST: Prescriptions/Create

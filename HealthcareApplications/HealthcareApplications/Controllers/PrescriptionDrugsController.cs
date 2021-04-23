@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using HealthcareApplications.Data;
 using HealthcareApplications.Models;
+using System.Net.Http;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
 
 namespace HealthcareApplications.Controllers
 {
@@ -88,11 +91,34 @@ namespace HealthcareApplications.Controllers
             {
                 _prescriptionDrugContext.Add(vm.PrescriptionDrug);
                 await _prescriptionDrugContext.SaveChangesAsync();
+                await SendPrescribedDrugToPharmacy(vm);
                 return RedirectToAction("Edit", "Prescriptions", new { Id = vm.PrescriptionDrug.PrescriptionId });
             }
             vm.DrugsList = SelectDrugsList();
 
             return View(vm);
+        }
+
+        private static async Task SendPrescribedDrugToPharmacy(PrescriptionDrugsCreateViewModel vm)
+        {
+            HttpClient client = new HttpClient();
+            var json = new PostPrescribedDrug()
+            {
+                Id = vm.PrescriptionDrug.Id,
+                DrugId = vm.PrescriptionDrug.DrugId,
+                PrescriptionId = vm.PrescriptionDrug.PrescriptionId,
+                Count = vm.PrescriptionDrug.Quantity,
+                Dosage = vm.PrescriptionDrug.Dosage,
+                RefillCount = vm.PrescriptionDrug.RefillCount
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(json), System.Text.Encoding.UTF8, "application/json");
+#if DEBUG
+            HttpResponseMessage response = await client.PostAsync("https://localhost:44381/api/PrescriptionsAPI/AddPrescribedDrugFromHealthcare", content);
+#else
+            HttpResponseMessage response = await client.PostAsync("http://wngcsp86.intra.uwlax.edu:8080/api/PrescriptionsAPI/AddPrescribedDrugFromHealthcare", content);
+#endif
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
         }
 
         // GET: PrescriptionDrugs/Edit/5
