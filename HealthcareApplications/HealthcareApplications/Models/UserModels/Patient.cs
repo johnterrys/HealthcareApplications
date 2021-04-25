@@ -31,5 +31,6 @@ namespace HealthcareApplications.Models
         public List<int> PrescriptionIds { get; set; }
         [DisplayName("User ID")]
         public int UserId { get; set; }
+        public string Pronouns { get; set; }
     }
 }
