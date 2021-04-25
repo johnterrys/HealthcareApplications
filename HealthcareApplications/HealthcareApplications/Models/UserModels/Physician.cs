@@ -18,6 +18,7 @@ namespace HealthcareApplications.Models
         public int LicenseNumber { get; set; }
         [DisplayName("User ID")]
         public int UserId { get; set; }
+        public string Pronouns { get; set; }
 
         public Prescription WritePrescription(Patient patient, Drug drug)
         {

@@ -1,4 +1,5 @@
 ﻿@using Microsoft.AspNetCore.Http
+@using HealthcareApplications.Controllers
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
 <!DOCTYPE html>
@@ -41,13 +42,16 @@
                         {
                             <li class="mr-auto"></li>
                         }
-                            <li>
-                                <label class="text-light d-sm-inline-flex ">Welcome, @HttpContextAccessor.HttpContext.Session.GetString("Username").ToString()</label>
-                            </li>
-                            <li>
-                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="LogOut">Log out</a>
-                            </li>
-                        </ul>
+                        <li>
+                            <label class="text-light d-sm-inline-flex mr-1">Welcome, @HttpContextAccessor.HttpContext.Session.GetString(HomeController.Name).ToString()</label>
+                        </li>
+                        <li>
+                            <a asp-controller="Home" asp-action="MyDetails" asp-id="@int.Parse(HttpContextAccessor.HttpContext.Session.GetString(HomeController.UserId))" class="text-light d-sm-inline-flex">View my details</a>
+                        </li>
+                        <li>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="LogOut">Log out</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </nav>
