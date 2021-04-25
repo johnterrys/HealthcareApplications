@@ -308,21 +308,29 @@ namespace HealthcareApplications.Controllers
         [HttpPost]
         public ActionResult EditMyDetails(UserDetailsViewModel vm)
         {
-            if (!ModelState.IsValid || vm.CurrentUser.SecQ2Index == vm.CurrentUser.SecQ1Index || vm.CurrentUser.SecQ3Index == vm.CurrentUser.SecQ1Index || vm.CurrentUser.SecQ3Index == vm.CurrentUser.SecQ2Index)
-            {
-                vm.Questions = GetSelectListItems(SecurityQuestions);
-                return View(vm);
-            }
             User foundUser = _userContext.Users.First(u => u.Id.ToString() == HttpContext.Session.GetString(UserId));
             Patient foundPatient = null;
             Physician foundPhysician = null;
             if (HttpContext.Session.GetString("Role") == "Patient")
             {
                 foundPatient = _patientContext.Patients.First(p => p.UserId == foundUser.Id);
+                if(vm.CurrentPatient.DateOfBirth == DateTime.MinValue)
+                {
+                    vm.CurrentPatient.DateOfBirth = foundPatient.DateOfBirth;
+                    //ModelState.MarkFieldSkipped("CurrentPatient.DateOfBirth");
+                    //ModelState.MarkFieldValid("CurrentPatient.DateOfBirth");
+                    ModelState.Remove("CurrentPatient.DateOfBirth");
+                }
             }
             else
             {
                 foundPhysician = _physicianContext.Physicians.First(p => p.UserId == foundUser.Id);
+            }
+
+            if (!ModelState.IsValid || vm.CurrentUser.SecQ2Index == vm.CurrentUser.SecQ1Index || vm.CurrentUser.SecQ3Index == vm.CurrentUser.SecQ1Index || vm.CurrentUser.SecQ3Index == vm.CurrentUser.SecQ2Index)
+            {
+                vm.Questions = GetSelectListItems(SecurityQuestions);
+                return View(vm);
             }
 
 
@@ -367,6 +375,10 @@ namespace HealthcareApplications.Controllers
                 if (!string.IsNullOrEmpty(vm.CurrentPatient.Pronouns))
                 {
                     foundPatient.Pronouns = vm.CurrentPatient.Pronouns;
+                }
+                if (vm.CurrentPatient.DateOfBirth != null)
+                {
+                    foundPatient.DateOfBirth = vm.CurrentPatient.DateOfBirth;
                 }
                 _patientContext.Patients.Update(foundPatient);
                 _patientContext.SaveChanges();

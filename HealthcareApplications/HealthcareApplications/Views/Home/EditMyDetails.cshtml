@@ -87,7 +87,7 @@
                 @Html.LabelFor(a => a.CurrentPatient.DateOfBirth, new { @class = "form-label" })
             </dt>
             <dd class="col-sm-10">
-                @Html.TextBoxFor(a => a.CurrentPatient.DateOfBirth, new { @class = "form-control" })
+                @Html.TextBoxFor(a => a.CurrentPatient.DateOfBirth, new { @class = "form-control", @type="date" })
                 @Html.ValidationMessageFor(a => a.CurrentPatient.DateOfBirth, "", new { @class = "text-danger" })
             </dd>
         }
@@ -110,10 +110,10 @@
 
         }
     </dl>
-        <input type="submit" value="Submit" class="btn btn-primary btn-block" style="width: 15%" />
+        <input type="submit" value="Submit" class="btn btn-danger btn-block" style="width: 15%" />
     }
 </div>
 <p> </p>
 <div>
-    <a asp-action="MyDetails" class="btn btn-primary btn-block" style="width: 15%">Cancel</a>
+    <a asp-action="MyDetails" class="btn btn-danger btn-block" style="width: 15%">Cancel</a>
 </div>

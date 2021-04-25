@@ -17,7 +17,8 @@ namespace HealthcareApplications.Models
         public int Id { get; set; }
         [Date]
         [DisplayName("Date Of Birth")]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
+        [Range(typeof(DateTime), "1/1/1900", "1/1/2021", ErrorMessage = "Date of birth must be between 1/1/1900 and 1/1/2021")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DateOfBirth { get; set; }
         [DisplayName("Address")]
         public String Address { get; set; }
