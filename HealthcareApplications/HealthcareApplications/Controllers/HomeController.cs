@@ -11,7 +11,6 @@ using HealthcareApplications.Data;
 using Microsoft.AspNetCore.Http;
 using System.Security.Cryptography;
 using System.Text;
-using InsuranceApplication.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HealthcareApplications.Controllers
