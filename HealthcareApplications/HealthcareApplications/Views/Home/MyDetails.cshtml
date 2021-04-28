@@ -1,5 +1,6 @@
 ﻿@model HealthcareApplications.Models.UserDetailsViewModel
 @using Microsoft.AspNetCore.Http
+@using HealthcareApplications.Controllers
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @{
     ViewData["Title"] = "Details";
@@ -9,7 +10,7 @@
 
 <div>
     <hr />
-    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "Patient")
+    @if (HttpContextAccessor.HttpContext.Session.GetString(HomeController.Role) == "Patient")
     {
         <dl class="row">
             <dt class="col-sm-2">

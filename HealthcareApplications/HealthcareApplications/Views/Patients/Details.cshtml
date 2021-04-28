@@ -38,7 +38,7 @@
     </dl>
 </div>
 <h4>Prescriptions</h4>
-@if (HttpContextAccessor.HttpContext.Session.GetString("Role").ToString() == "Physician")
+@if (HttpContextAccessor.HttpContext.Session.GetString(HomeController.Role).ToString() == "Physician")
 {
     <div>
         <a asp-controller="Prescriptions" asp-action="Create" asp-route-id="@Model.Id">Create Prescription</a>
