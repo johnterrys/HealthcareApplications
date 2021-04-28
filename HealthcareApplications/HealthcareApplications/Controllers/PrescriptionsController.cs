@@ -102,7 +102,7 @@ namespace HealthcareApplications.Controllers
 #if DEBUG
             HttpResponseMessage response = await client.PostAsync("https://localhost:44381/api/PrescriptionsAPI/AddPrescriptionFromHealthcare", content);
 #else
-            HttpResponseMessage response = await client.PostAsync("http://wngcsp86.intra.uwlax.edu:8080/api/PrescriptionsAPI/AddPrescriptionFromHealthcare", content);
+            HttpResponseMessage response = await client.PostAsync("https://wngcsp86.intra.uwlax.edu:8080/api/PrescriptionsAPI/AddPrescriptionFromHealthcare", content);
 #endif
 
             response.EnsureSuccessStatusCode();

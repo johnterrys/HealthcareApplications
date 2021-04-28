@@ -115,7 +115,7 @@ namespace HealthcareApplications.Controllers
 #if DEBUG
             HttpResponseMessage response = await client.PostAsync("https://localhost:44381/api/PrescriptionsAPI/AddPrescribedDrugFromHealthcare", content);
 #else
-            HttpResponseMessage response = await client.PostAsync("http://wngcsp86.intra.uwlax.edu:8080/api/PrescriptionsAPI/AddPrescribedDrugFromHealthcare", content);
+            HttpResponseMessage response = await client.PostAsync("https://wngcsp86.intra.uwlax.edu:8080/api/PrescriptionsAPI/AddPrescribedDrugFromHealthcare", content);
 #endif
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
