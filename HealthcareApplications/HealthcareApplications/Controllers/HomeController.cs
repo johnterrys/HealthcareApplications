@@ -102,6 +102,7 @@ namespace HealthcareApplications.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> LoginAsync(User enteredUser)
         {
+            HttpContext.Session.SetString(IncorrectPasswordString, "");
             if (ModelState.IsValid)
             {
                 if (enteredUser.Username == null)
@@ -115,6 +116,7 @@ namespace HealthcareApplications.Controllers
                 {
                     HttpContext.Session.SetString(Username, "");
                     HttpContext.Session.SetString(SecurityQuestionNum, "0");
+                    HttpContext.Session.SetString(IncorrectPasswordString, "Username or password is incorrect");
                     return View();
                 }
                 if (foundUser.AccountStatus != 1)
@@ -166,6 +168,8 @@ namespace HealthcareApplications.Controllers
 
                         return View(enteredUser);
                     }
+
+                    HttpContext.Session.SetString(IncorrectPasswordString, "Username or password is incorrect");
                     return View(enteredUser);
                 }
                 byte[] saltedQ1 = Encoding.ASCII.GetBytes(enteredUser.SecQ1Response + Encoding.ASCII.GetString(foundUser.Salt));
