@@ -25,7 +25,7 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="UserDashBoard">Home</a>
                         </li>
-                        @if (HttpContextAccessor.HttpContext.Session.GetString("Role").ToString() == "Physician")
+                        @if (HttpContextAccessor.HttpContext.Session.GetString(HomeController.Role).ToString() == "Physician")
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Patients" asp-action="Index">

@@ -67,7 +67,7 @@
             @Html.TextBoxFor(a => a.CurrentUser.SecQ3Response, new { @class = "form-control" })
             @Html.ValidationMessageFor(a => a.CurrentUser.SecQ3Response, "", new { @class = "text-danger" })
         </dd>
-        @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "Patient")
+        @if (HttpContextAccessor.HttpContext.Session.GetString(HomeController.Role) == "Patient")
         {
             <dt class="col-sm-2">
                 @Html.LabelFor(a => a.CurrentPatient.Name, new { @class = "form-label" })
