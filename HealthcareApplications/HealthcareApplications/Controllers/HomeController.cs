@@ -34,11 +34,17 @@ namespace HealthcareApplications.Controllers
                                                                    "What street did you live on in third grade?",
                                                                    "What was your childhood best friend's name?" };
 
-        private const string SecurityQuestionNum = "SecurityQuestionNum";
-        private const string SecurityQuestionText = "SecurityQuestionText";
-        private const string SecurityQuestionsAttempted = "SecurityQuestionsAttempted";
+        public const string SecurityQuestionNum = "SecurityQuestionNum";
+        public const string SecurityQuestionText = "SecurityQuestionText";
+        public const string SecurityQuestionsAttempted = "SecurityQuestionsAttempted";
         public static string UserId = "UserId";
+        public static string Username = "Username";
         public static string Name = "Name";
+        public static string IncorrectPasswordString = "IncorrectPasswordString";
+        public static string Role = "Role";
+        public static string IncludeProcessed = "IncludeProcessed";
+        public static string DrugCountValidation = "DrugCountValidation";
+        public static string PrescriptionFillValidation = "PrescriptionFillValidation";
 
         public HomeController(ILogger<HomeController> logger, UserContext context, PatientContext patientContext, PhysicianContext physicianContext)
         {
