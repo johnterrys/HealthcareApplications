@@ -45,19 +45,19 @@ namespace HealthcareApplications.Controllers
                                                                    "What was the make of your first car?",
                                                                    "In which year, you first flew in an airplane?"};
 
-        public const string SecurityQuestionNum = "SecurityQuestionNum";
-        public const string SecurityQuestionText = "SecurityQuestionText";
-        public const string SecurityQuestionsAttempted = "SecurityQuestionsAttempted";
-        public static string UserId = "UserId";
-        public static string Username = "Username";
-        public static string Name = "Name";
-        public static string IncorrectPasswordString = "IncorrectPasswordString";
-        public static string Role = "Role";
-        public static string IncludeProcessed = "IncludeProcessed";
-        public static string DrugCountValidation = "DrugCountValidation";
-        public static string PrescriptionFillValidation = "PrescriptionFillValidation";
-        public static string PatientId = "PatientId";
-        public static string PhysicianId = "PhysicianId";
+        public const string SecurityQuestionNum = "HealthcareSecurityQuestionNum";
+        public const string SecurityQuestionText = "HealthcareSecurityQuestionText";
+        public const string SecurityQuestionsAttempted = "HealthcareSecurityQuestionsAttempted";
+        public static string UserId = "HealthcareUserId";
+        public static string Username = "HealthcareUsername";
+        public static string Name = "HealthcareName";
+        public static string IncorrectPasswordString = "HealthcareIncorrectPasswordString";
+        public static string Role = "HealthcareRole";
+        public static string IncludeProcessed = "HealthcareIncludeProcessed";
+        public static string DrugCountValidation = "HealthcareDrugCountValidation";
+        public static string PrescriptionFillValidation = "HealthcarePrescriptionFillValidation";
+        public static string PatientId = "HealthcarePatientId";
+        public static string PhysicianId = "HealthcarePhysicianId";
 
         public HomeController(ILogger<HomeController> logger, UserContext context, PatientContext patientContext, PhysicianContext physicianContext)
         {
