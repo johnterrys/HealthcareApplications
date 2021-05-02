@@ -91,7 +91,6 @@ namespace HealthcareApplications.Controllers
             {
                 _prescriptionDrugContext.Add(vm.PrescriptionDrug);
                 await _prescriptionDrugContext.SaveChangesAsync();
-                await SendPrescribedDrugToPharmacy(vm);
                 return RedirectToAction("Edit", "Prescriptions", new { Id = vm.PrescriptionDrug.PrescriptionId });
             }
             vm.DrugsList = SelectDrugsList();

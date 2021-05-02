@@ -35,8 +35,10 @@
     <a asp-controller="PrescriptionDrugs" asp-action="Create" asp-route-id="@Model.PrescriptionId">Add Drug</a>
 </div>
 @await Component.InvokeAsync("PrescriptionsPrescriptionDrugsList", new { Model.PrescriptionId, SearchPrescriptionDrugs = "" })
-
 <div>
-    <a asp-controller="Patients" asp-action="Details" asp-route-id="@Model.Prescription.PrescribedPatientId">Back to Patient</a>
+    <button asp-controller="Prescriptions" asp-action="FinishPrescription" asp-route-id="@Model.Prescription.Id">Finish Prescription</button>
+</div>
+<div>
+    <a asp-controller="Prescriptions" asp-action="CancelPrescription" asp-route-id="@Model.Prescription.Id">Back to Patient</a>
 </div>
 

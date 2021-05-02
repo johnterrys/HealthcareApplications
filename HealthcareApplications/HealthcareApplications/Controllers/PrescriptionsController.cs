@@ -80,12 +80,21 @@ namespace HealthcareApplications.Controllers
 
             var physician = _physicianContext.Physicians.Find(prescription.PrescribingPhysicianId);
 
-            await SendPrescriptionToPharmacy(patient, prescription, physician);
-
             return RedirectToAction(nameof(Edit), new { prescription.Id });
         }
 
-        private static async Task SendPrescriptionToPharmacy(Patient patient, Prescription prescription, Physician physician)
+        public async Task<IActionResult> FinishPrescription(int id) // passes in Prescription ID
+        {
+            var prescription = _prescriptionContext.Prescriptions.Find(id);
+            var patient = _patientContex.Patients.Find(prescription.PrescribedPatientId);
+            var physician = _physicianContext.Physicians.Find(patient.PhysicianId);
+
+            await SendPrescriptionToPharmacy(patient, prescription, physician);
+
+            return RedirectToAction("Details", "Patients", new { id = patient.Id});
+        }
+
+        private async Task SendPrescriptionToPharmacy(Patient patient, Prescription prescription, Physician physician)
         {
             HttpClient client = new HttpClient();
             var json = new PostPrescription()
@@ -107,6 +116,52 @@ namespace HealthcareApplications.Controllers
 
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
+
+            var prescribedDrugs = _prescriptionDrugContext.PrescriptionDrugs.Where(pd => pd.PrescriptionId == prescription.Id).ToList();
+
+            foreach (PrescriptionDrug prescribedDrug in prescribedDrugs)
+            {
+               await SendPrescribedDrugToPharmacy(prescribedDrug);
+            }
+
+        }
+
+        private static async Task SendPrescribedDrugToPharmacy(PrescriptionDrug prescriptionDrug)
+        {
+            HttpClient client = new HttpClient();
+            var json = new PostPrescribedDrug()
+            {
+                Id = prescriptionDrug.Id,
+                DrugId = prescriptionDrug.DrugId,
+                PrescriptionId = prescriptionDrug.PrescriptionId,
+                Count = prescriptionDrug.Quantity,
+                Dosage = prescriptionDrug.Dosage,
+                RefillCount = prescriptionDrug.RefillCount
+            };
+            var content = new StringContent(JsonConvert.SerializeObject(json), System.Text.Encoding.UTF8, "application/json");
+#if DEBUG
+            HttpResponseMessage response = await client.PostAsync("https://localhost:44381/api/PrescriptionsAPI/AddPrescribedDrugFromHealthcare", content);
+#else
+            HttpResponseMessage response = await client.PostAsync("https://wngcsp86.intra.uwlax.edu:8080/api/PrescriptionsAPI/AddPrescribedDrugFromHealthcare", content);
+#endif
+            response.EnsureSuccessStatusCode();
+            string responseBody = await response.Content.ReadAsStringAsync();
+        }
+
+
+        public async Task<IActionResult> CancelPrescription(int id) // passes in Prescription ID
+        {
+            var prescription = _prescriptionContext.Prescriptions.Find(id);
+            var patient = _patientContex.Patients.Find(prescription.PrescribedPatientId);
+            var prescribedDrugs = _prescriptionDrugContext.PrescriptionDrugs.Where(pd => pd.PrescriptionId == prescription.Id).ToList();
+
+            _prescriptionDrugContext.PrescriptionDrugs.RemoveRange(prescribedDrugs);
+            await _prescriptionDrugContext.SaveChangesAsync();
+
+            _prescriptionContext.Prescriptions.Remove(prescription);
+            await _prescriptionContext.SaveChangesAsync();
+
+            return RedirectToAction("Details", "Patients", new { id = patient.Id });
         }
 
         // POST: Prescriptions/Create
