@@ -88,13 +88,19 @@ namespace HealthcareApplications.Controllers
             var prescription = _prescriptionContext.Prescriptions.Find(id);
             var patient = _patientContex.Patients.Find(prescription.PrescribedPatientId);
             var physician = _physicianContext.Physicians.Find(patient.PhysicianId);
+            var prescribedDrugs = _prescriptionDrugContext.PrescriptionDrugs.Where(pd => pd.PrescriptionId == prescription.Id).ToList();
 
-            await SendPrescriptionToPharmacy(patient, prescription, physician);
+            if (prescribedDrugs.Count == 0)
+            {
+                return RedirectToAction("Edit", "Prescriptions", new { id = prescription.Id });
+            }
+
+            await SendPrescriptionToPharmacy(patient, prescription, physician, prescribedDrugs);
 
             return RedirectToAction("Details", "Patients", new { id = patient.Id});
         }
 
-        private async Task SendPrescriptionToPharmacy(Patient patient, Prescription prescription, Physician physician)
+        private async Task SendPrescriptionToPharmacy(Patient patient, Prescription prescription, Physician physician, List<PrescriptionDrug> prescribedDrugs)
         {
             HttpClient client = new HttpClient();
             var json = new PostPrescription()
@@ -116,8 +122,6 @@ namespace HealthcareApplications.Controllers
 
             response.EnsureSuccessStatusCode();
             string responseBody = await response.Content.ReadAsStringAsync();
-
-            var prescribedDrugs = _prescriptionDrugContext.PrescriptionDrugs.Where(pd => pd.PrescriptionId == prescription.Id).ToList();
 
             foreach (PrescriptionDrug prescribedDrug in prescribedDrugs)
             {
