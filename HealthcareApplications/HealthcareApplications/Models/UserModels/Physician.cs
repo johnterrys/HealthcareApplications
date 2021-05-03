@@ -15,7 +15,7 @@ namespace HealthcareApplications.Models
         [DisplayName("Patients")]
         public Patient[] Patients { get; set; }
         [DisplayName("License Number")]
-        public int LicenseNumber { get; set; }
+        public string LicenseNumber { get; set; }
         [DisplayName("User ID")]
         public int UserId { get; set; }
         public string Pronouns { get; set; }

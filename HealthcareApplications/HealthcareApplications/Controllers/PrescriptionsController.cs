@@ -101,7 +101,7 @@ namespace HealthcareApplications.Controllers
             {
                 Id = prescription.Id,
                 PhysicianName = physician.Name,
-                PhysicianLicenseNumber = physician.LicenseNumber.ToString(),
+                PhysicianLicenseNumber = physician.LicenseNumber,
                 PatientName = patient.Name,
                 PatientDOB = patient.DateOfBirth,
                 PatientAddress = patient.Address,
